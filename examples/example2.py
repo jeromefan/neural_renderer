@@ -1,7 +1,6 @@
 """
 Example 2. Optimizing vertices.
 """
-from __future__ import division
 import os
 import argparse
 import glob
@@ -18,6 +17,7 @@ import neural_renderer as nr
 current_dir = os.path.dirname(os.path.realpath(__file__))
 data_dir = os.path.join(current_dir, 'data')
 
+
 class Model(nn.Module):
     def __init__(self, filename_obj, filename_ref):
         super(Model, self).__init__()
@@ -29,11 +29,21 @@ class Model(nn.Module):
 
         # create textures
         texture_size = 2
-        textures = torch.ones(1, self.faces.shape[1], texture_size, texture_size, texture_size, 3, dtype=torch.float32)
+        textures = torch.ones(
+            1,
+            self.faces.shape[1],
+            texture_size,
+            texture_size,
+            texture_size,
+            3,
+            dtype=torch.float32,
+        )
         self.register_buffer('textures', textures)
 
         # load reference image
-        image_ref = torch.from_numpy(imread(filename_ref).astype(np.float32).mean(-1) / 255.)[None, ::]
+        image_ref = torch.from_numpy(
+            imread(filename_ref).astype(np.float32).mean(-1) / 255.0
+        )[None, ::]
         self.register_buffer('image_ref', image_ref)
 
         # setup renderer
@@ -43,7 +53,7 @@ class Model(nn.Module):
     def forward(self):
         self.renderer.eye = nr.get_points_from_angles(2.732, 0, 90)
         image = self.renderer(self.vertices, self.faces, mode='silhouettes')
-        loss = torch.sum((image - self.image_ref[None, :, :])**2)
+        loss = torch.sum((image - self.image_ref[None, :, :]) ** 2)
         return loss
 
 
@@ -57,12 +67,27 @@ def make_gif(filename):
 
 def main():
     parser = argparse.ArgumentParser()
-    parser.add_argument('-io', '--filename_obj', type=str, default=os.path.join(data_dir, 'teapot.obj'))
-    parser.add_argument('-ir', '--filename_ref', type=str, default=os.path.join(data_dir, 'example2_ref.png'))
     parser.add_argument(
-        '-oo', '--filename_output_optimization', type=str, default=os.path.join(data_dir, 'example2_optimization.gif'))
+        '-io', '--filename_obj', type=str, default=os.path.join(data_dir, 'teapot.obj')
+    )
     parser.add_argument(
-        '-or', '--filename_output_result', type=str, default=os.path.join(data_dir, 'example2_result.gif'))
+        '-ir',
+        '--filename_ref',
+        type=str,
+        default=os.path.join(data_dir, 'example2_ref.png'),
+    )
+    parser.add_argument(
+        '-oo',
+        '--filename_output_optimization',
+        type=str,
+        default=os.path.join(data_dir, 'example2_optimization.gif'),
+    )
+    parser.add_argument(
+        '-or',
+        '--filename_output_result',
+        type=str,
+        default=os.path.join(data_dir, 'example2_result.gif'),
+    )
     parser.add_argument('-g', '--gpu', type=int, default=0)
     args = parser.parse_args()
 

@@ -1,3 +1,7 @@
+# Modified Neural 3D Mesh Renderer (PyTorch 1.5+)
+
+Change all `AT_CHECK` to `TORCH_CHECK` to satisify PyTorch 1.5+ versions.
+
 # Neural 3D Mesh Renderer (CVPR 2018)
 
 This repo contains a PyTorch implementation of the paper [Neural 3D Mesh Renderer](http://hiroharu-kato.com/projects_en/neural_renderer.html) by Hiroharu Kato, Yoshitaka Ushiku, and Tatsuya Harada.
