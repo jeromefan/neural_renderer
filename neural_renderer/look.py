@@ -3,7 +3,7 @@ import torch
 import torch.nn.functional as F
 
 
-def look(vertices, eye, direction=[0, 1, 0], up=None):
+def look(vertices, eye, direction=[0, 0, 1], up=[0, 1, 0]):
     """
     "Look" transformation of vertices.
     """
@@ -26,8 +26,13 @@ def look(vertices, eye, direction=[0, 1, 0], up=None):
     elif torch.is_tensor(eye):
         eye = eye.to(device)
 
-    if up is None:
-        up = torch.cuda.FloatTensor([0, 1, 0])
+    if isinstance(up, list) or isinstance(up, tuple):
+        up = torch.tensor(up, dtype=torch.float32, device=device)
+    elif isinstance(direction, np.ndarray):
+        up = torch.from_numpy(up).to(device)
+    elif torch.is_tensor(up):
+        up = up.to(device)
+
     if eye.ndimension() == 1:
         eye = eye[None, :]
     if direction.ndimension() == 1:
