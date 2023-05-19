@@ -2,6 +2,16 @@
 
 Change all `AT_CHECK` to `TORCH_CHECK` to satisify PyTorch 1.5+ versions.
 
+Add 'camera_up' to `class Renderer` in the `renderer.py`, this should allow users to directly change the `up` variable in `def look` in the `look.py` from `class Renderer`.
+
+***Usage:***
+
+```bash
+git clone https://github.com/jeromefan/neural_renderer.git
+cd neural_renderer
+python setup.py install
+```
+
 # Neural 3D Mesh Renderer (CVPR 2018)
 
 This repo contains a PyTorch implementation of the paper [Neural 3D Mesh Renderer](http://hiroharu-kato.com/projects_en/neural_renderer.html) by Hiroharu Kato, Yoshitaka Ushiku, and Tatsuya Harada.
