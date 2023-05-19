@@ -43,7 +43,7 @@ setup(
     author_email='nkolot@seas.upenn.edu',
     license='MIT License',
     version='1.1.3',
-    name='neural_renderer_pytorch1.5+',
+    name='neural_renderer_pytorch',
     test_suite='setup.test_all',
     packages=['neural_renderer', 'neural_renderer.cuda'],
     install_requires=INSTALL_REQUIREMENTS,
