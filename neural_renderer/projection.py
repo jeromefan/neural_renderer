@@ -18,6 +18,7 @@ def projection(vertices, K, R, t, dist_coeffs, orig_size, eps=1e-9):
     '''
 
     # instead of P*x we compute x'*P'
+    # 首先使用相机外参将世界坐标的点转换到相机坐标系中
     vertices = torch.matmul(vertices, R.transpose(2, 1)) + t
     x, y, z = vertices[:, :, 0], vertices[:, :, 1], vertices[:, :, 2]
     x_ = x / (z + eps)
