@@ -5,14 +5,14 @@ import neural_renderer as nr
 
 
 class Mesh(object):
-    '''
+    """
     A simple class for creating and manipulating trimesh objects
-    '''
+    """
 
     def __init__(self, vertices, faces, textures=None, texture_size=4):
-        '''
+        """
         vertices, faces and textures(if not None) are expected to be Tensor objects
-        '''
+        """
         self.vertices = vertices
         self.faces = faces
         self.num_vertices = self.vertices.shape[0]
@@ -30,9 +30,9 @@ class Mesh(object):
     def fromobj(
         cls, filename_obj, normalization=True, load_texture=False, texture_size=4
     ):
-        '''
+        """
         Create a Mesh object from a .obj file
-        '''
+        """
         if load_texture:
             vertices, faces, textures = nr.load_obj(
                 filename_obj,

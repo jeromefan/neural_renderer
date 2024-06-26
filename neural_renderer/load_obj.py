@@ -8,28 +8,28 @@ from skimage.io import imread
 import neural_renderer.cuda.load_textures as load_textures_cuda
 
 texture_wrapping_dict = {
-    'REPEAT': 0,
-    'MIRRORED_REPEAT': 1,
-    'CLAMP_TO_EDGE': 2,
-    'CLAMP_TO_BORDER': 3,
+    "REPEAT": 0,
+    "MIRRORED_REPEAT": 1,
+    "CLAMP_TO_EDGE": 2,
+    "CLAMP_TO_BORDER": 3,
 }
 
 
 def load_mtl(filename_mtl):
-    '''
+    """
     load color (Kd) and filename of textures from *.mtl
-    '''
+    """
     texture_filenames = {}
     colors = {}
-    material_name = ''
+    material_name = ""
     with open(filename_mtl) as f:
         for line in f.readlines():
             if len(line.split()) != 0:
-                if line.split()[0] == 'newmtl':
+                if line.split()[0] == "newmtl":
                     material_name = line.split()[1]
-                if line.split()[0] == 'map_Kd':
+                if line.split()[0] == "map_Kd":
                     texture_filenames[material_name] = line.split()[1]
-                if line.split()[0] == 'Kd':
+                if line.split()[0] == "Kd":
                     colors[material_name] = np.array(
                         list(map(float, line.split()[1:4]))
                     )
@@ -40,7 +40,7 @@ def load_textures(
     filename_obj,
     filename_mtl,
     texture_size,
-    texture_wrapping='REPEAT',
+    texture_wrapping="REPEAT",
     use_bilinear=True,
 ):
     # load vertices
@@ -50,36 +50,36 @@ def load_textures(
     for line in lines:
         if len(line.split()) == 0:
             continue
-        if line.split()[0] == 'vt':
+        if line.split()[0] == "vt":
             vertices.append([float(v) for v in line.split()[1:3]])
     vertices = np.vstack(vertices).astype(np.float32)
 
     # load faces for textures
     faces = []
     material_names = []
-    material_name = ''
+    material_name = ""
     for line in lines:
         if len(line.split()) == 0:
             continue
-        if line.split()[0] == 'f':
+        if line.split()[0] == "f":
             vs = line.split()[1:]
             nv = len(vs)
-            if '/' in vs[0] and '//' not in vs[0]:
-                v0 = int(vs[0].split('/')[1])
+            if "/" in vs[0] and "//" not in vs[0]:
+                v0 = int(vs[0].split("/")[1])
             else:
                 v0 = 0
             for i in range(nv - 2):
-                if '/' in vs[i + 1] and '//' not in vs[i + 1]:
-                    v1 = int(vs[i + 1].split('/')[1])
+                if "/" in vs[i + 1] and "//" not in vs[i + 1]:
+                    v1 = int(vs[i + 1].split("/")[1])
                 else:
                     v1 = 0
-                if '/' in vs[i + 2] and '//' not in vs[i + 2]:
-                    v2 = int(vs[i + 2].split('/')[1])
+                if "/" in vs[i + 2] and "//" not in vs[i + 2]:
+                    v2 = int(vs[i + 2].split("/")[1])
                 else:
                     v2 = 0
                 faces.append((v0, v1, v2))
                 material_names.append(material_name)
-        if line.split()[0] == 'usemtl':
+        if line.split()[0] == "usemtl":
             material_name = line.split()[1]
     faces = np.vstack(faces).astype(np.int32) - 1
     faces = vertices[faces]
@@ -139,7 +139,7 @@ def load_obj(
     normalization=True,
     texture_size=4,
     load_texture=False,
-    texture_wrapping='REPEAT',
+    texture_wrapping="REPEAT",
     use_bilinear=True,
 ):
     """
@@ -155,7 +155,7 @@ def load_obj(
     for line in lines:
         if len(line.split()) == 0:
             continue
-        if line.split()[0] == 'v':
+        if line.split()[0] == "v":
             vertices.append([float(v) for v in line.split()[1:4]])
     vertices = torch.from_numpy(np.vstack(vertices).astype(np.float32)).cuda()
 
@@ -164,13 +164,13 @@ def load_obj(
     for line in lines:
         if len(line.split()) == 0:
             continue
-        if line.split()[0] == 'f':
+        if line.split()[0] == "f":
             vs = line.split()[1:]
             nv = len(vs)
-            v0 = int(vs[0].split('/')[0])
+            v0 = int(vs[0].split("/")[0])
             for i in range(nv - 2):
-                v1 = int(vs[i + 1].split('/')[0])
-                v2 = int(vs[i + 2].split('/')[0])
+                v1 = int(vs[i + 1].split("/")[0])
+                v2 = int(vs[i + 2].split("/")[0])
                 faces.append((v0, v1, v2))
     faces = torch.from_numpy(np.vstack(faces).astype(np.int32)).cuda() - 1
 
@@ -178,7 +178,7 @@ def load_obj(
     textures = None
     if load_texture:
         for line in lines:
-            if line.startswith('mtllib'):
+            if line.startswith("mtllib"):
                 filename_mtl = os.path.join(
                     os.path.dirname(filename_obj), line.split()[1]
                 )
@@ -190,7 +190,7 @@ def load_obj(
                     use_bilinear=use_bilinear,
                 )
         if textures is None:
-            raise Exception('Failed to load textures.')
+            raise Exception("Failed to load textures.")
 
     # normalize into a unit cube centered zero
     if normalization:

@@ -8,7 +8,7 @@ def look_at(vertices, eye, at=[0, 0, 0], up=[0, 1, 0]):
     "Look at" transformation of vertices.
     """
     if vertices.ndimension() != 3:
-        raise ValueError('vertices Tensor should have 3 dimensions')
+        raise ValueError("vertices Tensor should have 3 dimensions")
 
     device = vertices.device
 

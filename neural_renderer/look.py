@@ -8,10 +8,10 @@ def look(vertices, eye, direction=[0, 0, 1], up=[0, 1, 0]):
     "Look" transformation of vertices.
     """
     if vertices.ndimension() != 3:
-        raise ValueError('vertices Tensor should have 3 dimensions')
+        raise ValueError("vertices Tensor should have 3 dimensions")
 
     device = vertices.device
-    
+
     if isinstance(eye, list) or isinstance(eye, tuple):
         eye = torch.tensor(eye, dtype=torch.float32, device=device)
     elif isinstance(eye, np.ndarray):

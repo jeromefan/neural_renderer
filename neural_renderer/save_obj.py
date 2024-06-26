@@ -49,35 +49,35 @@ def save_obj(filename, vertices, faces, textures=None):
     assert faces.ndimension() == 2
 
     if textures is not None:
-        filename_mtl = filename[:-4] + '.mtl'
-        filename_texture = filename[:-4] + '.png'
-        material_name = 'material_1'
+        filename_mtl = filename[:-4] + ".mtl"
+        filename_texture = filename[:-4] + ".png"
+        material_name = "material_1"
         texture_image, vertices_textures = create_texture_image(textures)
         imsave(filename_texture, texture_image)
 
     faces = faces.detach().cpu().numpy()
 
-    with open(filename, 'w') as f:
-        f.write('# %s\n' % os.path.basename(filename))
-        f.write('#\n')
-        f.write('\n')
+    with open(filename, "w") as f:
+        f.write("# %s\n" % os.path.basename(filename))
+        f.write("#\n")
+        f.write("\n")
 
         if textures is not None:
-            f.write('mtllib %s\n\n' % os.path.basename(filename_mtl))
+            f.write("mtllib %s\n\n" % os.path.basename(filename_mtl))
 
         for vertex in vertices:
-            f.write('v %.8f %.8f %.8f\n' % (vertex[0], vertex[1], vertex[2]))
-        f.write('\n')
+            f.write("v %.8f %.8f %.8f\n" % (vertex[0], vertex[1], vertex[2]))
+        f.write("\n")
 
         if textures is not None:
             for vertex in vertices_textures.reshape((-1, 2)):
-                f.write('vt %.8f %.8f\n' % (vertex[0], vertex[1]))
-            f.write('\n')
+                f.write("vt %.8f %.8f\n" % (vertex[0], vertex[1]))
+            f.write("\n")
 
-            f.write('usemtl %s\n' % material_name)
+            f.write("usemtl %s\n" % material_name)
             for i, face in enumerate(faces):
                 f.write(
-                    'f %d/%d %d/%d %d/%d\n'
+                    "f %d/%d %d/%d %d/%d\n"
                     % (
                         face[0] + 1,
                         3 * i + 1,
@@ -87,12 +87,12 @@ def save_obj(filename, vertices, faces, textures=None):
                         3 * i + 3,
                     )
                 )
-            f.write('\n')
+            f.write("\n")
         else:
             for face in faces:
-                f.write('f %d %d %d\n' % (face[0] + 1, face[1] + 1, face[2] + 1))
+                f.write("f %d %d %d\n" % (face[0] + 1, face[1] + 1, face[2] + 1))
 
     if textures is not None:
-        with open(filename_mtl, 'w') as f:
-            f.write('newmtl %s\n' % material_name)
-            f.write('map_Kd %s\n' % os.path.basename(filename_texture))
+        with open(filename_mtl, "w") as f:
+            f.write("newmtl %s\n" % material_name)
+            f.write("map_Kd %s\n" % os.path.basename(filename_texture))

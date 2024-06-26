@@ -15,7 +15,7 @@ class Renderer(nn.Module):
         anti_aliasing=True,
         background_color=[0, 0, 0],
         fill_back=True,
-        camera_mode='projection',
+        camera_mode="projection",
         K=None,
         R=None,
         t=None,
@@ -40,7 +40,7 @@ class Renderer(nn.Module):
 
         # camera
         self.camera_mode = camera_mode
-        if self.camera_mode == 'projection':
+        if self.camera_mode == "projection":
             self.K = K
             self.R = R
             self.t = t
@@ -54,14 +54,14 @@ class Renderer(nn.Module):
             if dist_coeffs is None:
                 self.dist_coeffs = torch.cuda.FloatTensor([[0.0, 0.0, 0.0, 0.0, 0.0]])
             self.orig_size = orig_size
-        elif self.camera_mode in ['look', 'look_at']:
+        elif self.camera_mode in ["look", "look_at"]:
             self.perspective = perspective
             self.viewing_angle = viewing_angle
             self.eye = [0, 0, -(1.0 / math.tan(math.radians(self.viewing_angle)) + 1)]
             self.camera_direction = [0, 0, 1]
             self.camera_up = [0, 1, 0]
         else:
-            raise ValueError('Camera mode has to be one of projection, look or look_at')
+            raise ValueError("Camera mode has to be one of projection, look or look_at")
 
         self.near = near
         self.far = far
@@ -88,24 +88,24 @@ class Renderer(nn.Module):
         dist_coeffs=None,
         orig_size=None,
     ):
-        '''
+        """
         Implementation of forward rendering method
         The old API is preserved for back-compatibility with the Chainer implementation
-        '''
+        """
 
         if mode is None:
             return self.render(
                 vertices, faces, textures, K, R, t, dist_coeffs, orig_size
             )
-        elif mode == 'rgb':
+        elif mode == "rgb":
             return self.render_rgb(
                 vertices, faces, textures, K, R, t, dist_coeffs, orig_size
             )
-        elif mode == 'silhouettes':
+        elif mode == "silhouettes":
             return self.render_silhouettes(
                 vertices, faces, K, R, t, dist_coeffs, orig_size
             )
-        elif mode == 'depth':
+        elif mode == "depth":
             return self.render_depth(vertices, faces, K, R, t, dist_coeffs, orig_size)
         else:
             raise ValueError("mode should be one of None, 'silhouettes' or 'depth'")
@@ -120,17 +120,19 @@ class Renderer(nn.Module):
             )
 
         # viewpoint transformation
-        if self.camera_mode == 'look_at':
+        if self.camera_mode == "look_at":
             vertices = nr.look_at(vertices, self.eye, up=self.camera_up)
             # perspective transformation
             if self.perspective:
                 vertices = nr.perspective(vertices, angle=self.viewing_angle)
-        elif self.camera_mode == 'look':
-            vertices = nr.look(vertices, self.eye, self.camera_direction, up=self.camera_up)
+        elif self.camera_mode == "look":
+            vertices = nr.look(
+                vertices, self.eye, self.camera_direction, up=self.camera_up
+            )
             # perspective transformation
             if self.perspective:
                 vertices = nr.perspective(vertices, angle=self.viewing_angle)
-        elif self.camera_mode == 'projection':
+        elif self.camera_mode == "projection":
             if K is None:
                 K = self.K
             if R is None:
@@ -158,17 +160,19 @@ class Renderer(nn.Module):
             ).detach()
 
         # viewpoint transformation
-        if self.camera_mode == 'look_at':
+        if self.camera_mode == "look_at":
             vertices = nr.look_at(vertices, self.eye, up=self.camera_up)
             # perspective transformation
             if self.perspective:
                 vertices = nr.perspective(vertices, angle=self.viewing_angle)
-        elif self.camera_mode == 'look':
-            vertices = nr.look(vertices, self.eye, self.camera_direction, up=self.camera_up)
+        elif self.camera_mode == "look":
+            vertices = nr.look(
+                vertices, self.eye, self.camera_direction, up=self.camera_up
+            )
             # perspective transformation
             if self.perspective:
                 vertices = nr.perspective(vertices, angle=self.viewing_angle)
-        elif self.camera_mode == 'projection':
+        elif self.camera_mode == "projection":
             if K is None:
                 K = self.K
             if R is None:
@@ -219,17 +223,19 @@ class Renderer(nn.Module):
         )
 
         # viewpoint transformation
-        if self.camera_mode == 'look_at':
+        if self.camera_mode == "look_at":
             vertices = nr.look_at(vertices, self.eye, up=self.camera_up)
             # perspective transformation
             if self.perspective:
                 vertices = nr.perspective(vertices, angle=self.viewing_angle)
-        elif self.camera_mode == 'look':
-            vertices = nr.look(vertices, self.eye, self.camera_direction, up=self.camera_up)
+        elif self.camera_mode == "look":
+            vertices = nr.look(
+                vertices, self.eye, self.camera_direction, up=self.camera_up
+            )
             # perspective transformation
             if self.perspective:
                 vertices = nr.perspective(vertices, angle=self.viewing_angle)
-        elif self.camera_mode == 'projection':
+        elif self.camera_mode == "projection":
             if K is None:
                 K = self.K
             if R is None:
@@ -289,17 +295,19 @@ class Renderer(nn.Module):
         )
 
         # viewpoint transformation
-        if self.camera_mode == 'look_at':
+        if self.camera_mode == "look_at":
             vertices = nr.look_at(vertices, self.eye, up=self.camera_up)
             # perspective transformation
             if self.perspective:
                 vertices = nr.perspective(vertices, angle=self.viewing_angle)
-        elif self.camera_mode == 'look':
-            vertices = nr.look(vertices, self.eye, self.camera_direction, up=self.camera_up)
+        elif self.camera_mode == "look":
+            vertices = nr.look(
+                vertices, self.eye, self.camera_direction, up=self.camera_up
+            )
             # perspective transformation
             if self.perspective:
                 vertices = nr.perspective(vertices, angle=self.viewing_angle)
-        elif self.camera_mode == 'projection':
+        elif self.camera_mode == "projection":
             if K is None:
                 K = self.K
             if R is None:
@@ -324,4 +332,4 @@ class Renderer(nn.Module):
             self.rasterizer_eps,
             self.background_color,
         )
-        return out['rgb'], out['depth'], out['alpha']
+        return out["rgb"], out["depth"], out["alpha"]

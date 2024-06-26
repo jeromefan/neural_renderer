@@ -5,11 +5,11 @@ import torch
 
 
 def perspective(vertices, angle=30.0):
-    '''
+    """
     Compute perspective distortion from a given angle
-    '''
+    """
     if vertices.ndimension() != 3:
-        raise ValueError('vertices Tensor should have 3 dimensions')
+        raise ValueError("vertices Tensor should have 3 dimensions")
     device = vertices.device
     angle = torch.tensor(angle / 180 * math.pi, dtype=torch.float32, device=device)
     angle = angle[None]

@@ -14,11 +14,11 @@ DEFAULT_BACKGROUND_COLOR = (0, 0, 0)
 
 
 class RasterizeFunction(Function):
-    '''
+    """
     Definition of differentiable rasterize operation
     Some parts of the code are implemented in CUDA
     Currently implemented only for cuda Tensors
-    '''
+    """
 
     @staticmethod
     def forward(
@@ -34,9 +34,9 @@ class RasterizeFunction(Function):
         return_alpha=False,
         return_depth=False,
     ):
-        '''
+        """
         Forward pass
-        '''
+        """
         ctx.image_size = image_size
         ctx.near = near
         ctx.far = far
@@ -148,9 +148,9 @@ class RasterizeFunction(Function):
 
     @staticmethod
     def backward(ctx, grad_rgb_map, grad_alpha_map, grad_depth_map):
-        '''
+        """
         Backward pass
-        '''
+        """
         (
             faces,
             textures,
@@ -374,10 +374,10 @@ class RasterizeFunction(Function):
 
 
 class Rasterize(nn.Module):
-    '''
+    """
     Wrapper around the autograd function RasterizeFunction
     Currently implemented only for cuda Tensors
-    '''
+    """
 
     def __init__(
         self,
@@ -403,7 +403,7 @@ class Rasterize(nn.Module):
 
     def forward(self, faces, textures):
         if faces.device == "cpu" or (textures is not None and textures.device == "cpu"):
-            raise TypeError('Rasterize module supports only cuda Tensors')
+            raise TypeError("Rasterize module supports only cuda Tensors")
         return RasterizeFunction.apply(
             faces,
             textures,
@@ -510,9 +510,9 @@ def rasterize_rgbad(
             depth = F.avg_pool2d(depth[:, None, :, :], kernel_size=(2, 2))[:, 0]
 
     ret = {
-        'rgb': rgb if return_rgb else None,
-        'alpha': alpha if return_alpha else None,
-        'depth': depth if return_depth else None,
+        "rgb": rgb if return_rgb else None,
+        "alpha": alpha if return_alpha else None,
+        "depth": depth if return_depth else None,
     }
 
     return ret
@@ -557,7 +557,7 @@ def rasterize(
         True,
         False,
         False,
-    )['rgb']
+    )["rgb"]
 
 
 def rasterize(
@@ -599,7 +599,7 @@ def rasterize(
         True,
         False,
         False,
-    )['rgb']
+    )["rgb"]
 
 
 def rasterize_silhouettes(
@@ -627,7 +627,7 @@ def rasterize_silhouettes(
     """
     return rasterize_rgbad(
         faces, None, image_size, anti_aliasing, near, far, eps, None, False, True, False
-    )['alpha']
+    )["alpha"]
 
 
 def rasterize_depth(
@@ -655,4 +655,4 @@ def rasterize_depth(
     """
     return rasterize_rgbad(
         faces, None, image_size, anti_aliasing, near, far, eps, None, False, False, True
-    )['depth']
+    )["depth"]
