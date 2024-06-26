@@ -6,6 +6,7 @@ import torch
 def projection(vertices, K, R, t, dist_coeffs, orig_size, eps=1e-9):
     '''
     Calculate projective transformation of vertices given a projection matrix
+    给定投影矩阵，计算顶点的投影变换
     Input parameters:
     K: batch_size * 3 * 3 intrinsic camera matrix
     R, t: batch_size * 3 * 3, batch_size * 1 * 3 extrinsic calibration parameters
@@ -13,6 +14,7 @@ def projection(vertices, K, R, t, dist_coeffs, orig_size, eps=1e-9):
     orig_size: original size of image captured by the camera
     Returns: For each point [X,Y,Z] in world coordinates [u,v,z] where u,v are the coordinates of the projection in
     pixels and z is the depth
+    Returns: 对于世界坐标的每个点[X,Y,Z]，有[u,v,z]，其中u和v为像素坐标、z为深度
     '''
 
     # instead of P*x we compute x'*P'
