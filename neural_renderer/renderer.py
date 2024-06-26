@@ -53,7 +53,6 @@ class Renderer(nn.Module):
             self.dist_coeffs = dist_coeffs
             if dist_coeffs is None:
                 self.dist_coeffs = torch.cuda.FloatTensor([[0.0, 0.0, 0.0, 0.0, 0.0]])
-            self.orig_size = orig_size
         elif self.camera_mode in ["look", "look_at"]:
             self.perspective = perspective
             self.viewing_angle = viewing_angle
@@ -141,9 +140,7 @@ class Renderer(nn.Module):
                 t = self.t
             if dist_coeffs is None:
                 dist_coeffs = self.dist_coeffs
-            if orig_size is None:
-                orig_size = self.orig_size
-            vertices = nr.projection(vertices, K, R, t, dist_coeffs, orig_size)
+            vertices = nr.projection(vertices, K, R, t, dist_coeffs)
 
         # rasterization
         faces = nr.vertices_to_faces(vertices, faces)
@@ -181,9 +178,7 @@ class Renderer(nn.Module):
                 t = self.t
             if dist_coeffs is None:
                 dist_coeffs = self.dist_coeffs
-            if orig_size is None:
-                orig_size = self.orig_size
-            vertices = nr.projection(vertices, K, R, t, dist_coeffs, orig_size)
+            vertices = nr.projection(vertices, K, R, t, dist_coeffs)
 
         # rasterization
         faces = nr.vertices_to_faces(vertices, faces)
@@ -244,9 +239,7 @@ class Renderer(nn.Module):
                 t = self.t
             if dist_coeffs is None:
                 dist_coeffs = self.dist_coeffs
-            if orig_size is None:
-                orig_size = self.orig_size
-            vertices = nr.projection(vertices, K, R, t, dist_coeffs, orig_size)
+            vertices = nr.projection(vertices, K, R, t, dist_coeffs)
 
         # rasterization
         faces = nr.vertices_to_faces(vertices, faces)
@@ -316,9 +309,7 @@ class Renderer(nn.Module):
                 t = self.t
             if dist_coeffs is None:
                 dist_coeffs = self.dist_coeffs
-            if orig_size is None:
-                orig_size = self.orig_size
-            vertices = nr.projection(vertices, K, R, t, dist_coeffs, orig_size)
+            vertices = nr.projection(vertices, K, R, t, dist_coeffs)
 
         # rasterization
         faces = nr.vertices_to_faces(vertices, faces)

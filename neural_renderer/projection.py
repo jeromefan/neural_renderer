@@ -3,7 +3,7 @@ from __future__ import division
 import torch
 
 
-def projection(vertices, K, R, t, dist_coeffs, orig_size, eps=1e-9):
+def projection(vertices, K, R, t, dist_coeffs, eps=1e-9):
     """
     Calculate projective transformation of vertices given a projection matrix
     给定投影矩阵，计算顶点的投影变换
